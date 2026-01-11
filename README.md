@@ -6,6 +6,5 @@ There are three zip files and in each file you can find ParaDiag_solver.m which 
 in the above paper. I put explanations in English for this main code.  
 
 There are several supporting functions collected in the folder 'Common_Functions' in each zip file.  
-I also added necessary explanations for each function, but in Chinese. You can copy it in text and translate the explanations to 
-your convenient language by ChatGPT. Or, you can directly connect me via wushulin84@hotmail.com or wusl393@nenu.edu.cn
+I also added necessary explanations for each function and if you have problem to use the codes please connect me via wushulin84@hotmail.com or wusl393@nenu.edu.cn
 
