@@ -1,20 +1,17 @@
 clear; clc;  
-% 设置全局参数数组
 global Kt  Nt Nx dt T_end flag_eigPA theta alpha flag_GMRES
 alpha=5e-3;
 theta=1/2;
 flag_eigPA=1;
 flag_GMRES=1;
 Nx=3;
-% 时间离散参数
-dt = 0.025;          % 时间步长
+dt = 0.025;          
 T_end =5;    
 
-Nt = ceil(T_end / dt);  % 时间步数
-time = 0:dt:T_end;  % 时间网格
+Nt = ceil(T_end / dt);   
+time = 0:dt:T_end;   
 It=speye(Nt);
- 
-% 生成三角形网格
+  
  
  Kt=zeros(Nx,Nx,Nt);
  for n=1:Nt
@@ -73,11 +70,11 @@ if flag_eigPA==1
      calP2=kron(C1,Ix)+dt*kron(diag(b2)*C2,barK2);
     [barK3,b3]=getKb(3);
      calP3=kron(C1,Ix)+dt*kron(diag(b3)*C2,barK3);
-    fprintf('计算预处理矩阵特征值 for Method-1...\n');
+    fprintf('Compute Eigenvalues for Preconditioned Matrix for Method-1...\n');
     eig_invP0A=eig(full(calP0\calA));
-    fprintf('计算预处理矩阵特征值 for Method-2...\n');
+    fprintf('Compute Eigenvalues for Preconditioned Matrix for Method-2...\n');
     eig_invP2A=eig(full(calP2\calA));
-    fprintf('计算预处理矩阵特征值 for Method-3...\n');
+    fprintf('Compute Eigenvalues for Preconditioned Matrix for Method-3...\n');
     eig_invP3A=eig(full(calP3\calA));
     figure(2);
     plot(real(eig_invP0A),imag(eig_invP0A),'ko');
@@ -151,8 +148,7 @@ if solver_P==0
     barK=zeros(Nx,Nx);
     for n=1:Nt
         barK=barK+Kt(:,:,n)/Nt;
-    end
-    %val=(kron(B1,Ix)+dt*kron(B2,barK))\du;
+    end 
     b=ones(Nt,1);
 elseif solver_P==2
      barK=zeros(Nx,Nx);
@@ -168,10 +164,10 @@ else
     [m, ~] = size(A1);
     vecs = zeros(m^2, Nt);
     for n = 1:Nt
-        An = Kt(:,:,n);   % 获取第n个块矩阵
-        vecs(:, n) = An(:);  % 向量化
+        An = Kt(:,:,n);   % get the n-th block
+        vecs(:, n) = An(:);  % vectorization
     end
-    % 计算Gram矩阵
+    % form Gram matrix
     G = vecs' * vecs;
     [V, eigvals] = eigs(G, 1,'la');
     u = (V(:, 1));  lambda = eigvals(1);  
@@ -181,20 +177,14 @@ else
         barK = barK + u(n) * Kt(:,:,n);
     end
     b = u;
-    % if sum(b < 0) > Nt/2
-    %     b = -b;
-    %     barK = -barK;
-    % end
 end
 end
 
 
 function val=Kt_fun(t)
-global T_end
 V=[1,-1,0;
      t,t,0; 
-     t,t,1];
-%D=diag([0;2/2-sin(1*sqrt(t))^2;0+t^2])*2;
+     t,t,1]; 
 D=diag([0;1-sin(0.5*t);t^2])*2;
 val=V*D*inv(V); 
 end
